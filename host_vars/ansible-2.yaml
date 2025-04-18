@@ -254,22 +254,22 @@
     status: IN USE
     version: 1.0
   memory:
-    free_mb: 1062.21875
+    free_mb: 1355.47265625
     total_mb: 7945.015625
-    used_mb: 6882.796875
+    used_mb: 6589.54296875
   nxos_compile_time: 11/30/2023 12:00:00 [12/14/2023 05:25:50]
   nxos_image_file: bootflash:///nxos64-cs.10.4.2.F.bin
   os_type: NX-OS
   processes:
-    running: 4
-    total: 958
+    running: 1
+    total: 900
   processor:
     memory: 8135696
     type: Intel(R) Xeon(R) Platinum 8275CL CPU @ 3.00GHz
   release_type: Feature Release
   uptime:
     days: 108
-    hours: 0
-    minutes: 15
-    seconds: 56
+    hours: 1
+    minutes: 17
+    seconds: 2
   version: 10.4(2)
