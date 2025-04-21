@@ -6,6 +6,32 @@
 - branches
 - name
 - path
+- address_family:
+  - afi: ipv4
+    networks:
+    - prefix: 10.0.0.0/24
+    - prefix: 172.16.0.0/16
+    safi: unicast
+  - afi: ipv6
+    networks:
+    - prefix: 2001:db8::/32
+    - prefix: 2001:db8:abcd::/48
+    safi: unicast
+  as_number: '65001'
+- as_number: '65001'
+  neighbors:
+  - neighbor_address: 192.168.1.2
+    remote_as: '65002'
+    update_source: loopback0
+  - neighbor_address: 192.168.2.1
+    remote_as: '65002'
+  - neighbor_address: 2001:db8::2
+    remote_as: '65003'
+  router_id: 1.1.1.1
+  timers:
+    bgp:
+      holdtime: 90
+      keepalive: 30
 - - name: Vlan1
   - name: Vlan10
   - description: UPLINK-LAG
@@ -239,6 +265,141 @@
   - ipv4:
     - address: dhcp
     name: mgmt0
+- processes:
+  - process_id: '100'
+    router_id: 203.0.113.20
+  - areas:
+    - area_id: 0.0.0.100
+      filter_list:
+      - direction: out
+        route_map: rmap_2
+      - direction: in
+        route_map: rmap_1
+      ranges:
+      - not_advertise: true
+        prefix: 198.51.100.64/27
+      - cost: 120
+        prefix: 198.51.100.96/27
+    - area_id: 0.0.0.101
+      authentication:
+        message_digest: true
+    process_id: '102'
+    redistribute:
+    - protocol: direct
+      route_map: ospf102-direct-connect
+    - id: '120'
+      protocol: eigrp
+      route_map: rmap_1
+    router_id: 198.51.100.1
+    vrfs:
+    - areas:
+      - area_id: 0.0.0.102
+        nssa:
+          default_information_originate: true
+          no_summary: true
+      - area_id: 0.0.0.103
+        nssa:
+          no_summary: true
+          translate:
+            type7:
+              always: true
+      redistribute:
+      - protocol: static
+        route_map: zone1-static-connect
+      router_id: 198.51.100.129
+      summary_address:
+      - prefix: 198.51.100.128/27
+        tag: 121
+      - prefix: 198.51.100.160/27
+      vrf: zone1
+    - auto_cost:
+        reference_bandwidth: 45
+        unit: Gbps
+      vrf: zone2
+- processes:
+  - process_id: '100'
+    router_id: 203.0.113.20
+  - address_family:
+      afi: ipv6
+      areas:
+      - area_id: 0.0.0.100
+        filter_list:
+        - direction: out
+          route_map: rmap_2
+        - direction: in
+          route_map: rmap_1
+        ranges:
+        - not_advertise: true
+          prefix: 2001:db2::/32
+        - cost: 120
+          prefix: 2001:db3::/32
+      redistribute:
+      - protocol: direct
+        route_map: ospf102-direct-connect
+      - id: '120'
+        protocol: eigrp
+        route_map: rmap_1
+      safi: unicast
+    process_id: '102'
+    router_id: 198.51.100.1
+    vrfs:
+    - areas:
+      - area_id: 0.0.0.102
+        nssa:
+          default_information_originate: true
+          no_summary: true
+      - area_id: 0.0.0.103
+        nssa:
+          no_summary: true
+          translate:
+            type7:
+              always: true
+      router_id: 198.51.100.129
+      vrf: zone1
+    - auto_cost:
+        reference_bandwidth: 45
+        unit: Gbps
+      vrf: zone2
+  - address_family:
+      afi: ipv6
+      areas:
+      - area_id: 0.0.0.100
+        filter_list:
+        - direction: out
+          route_map: rmap_2
+        - direction: in
+          route_map: rmap_1
+        ranges:
+        - not_advertise: true
+          prefix: 2001:db2::/32
+        - cost: 120
+          prefix: 2001:db3::/32
+      redistribute:
+      - protocol: direct
+        route_map: ospf102-direct-connect
+      - id: '120'
+        protocol: eigrp
+        route_map: rmap_1
+      safi: unicast
+    process_id: '201'
+    router_id: 192.0.2.1
+    vrfs:
+    - areas:
+      - area_id: 0.0.0.102
+        nssa:
+          default_information_originate: true
+          no_summary: true
+      - area_id: 0.0.0.103
+        nssa:
+          no_summary: true
+          translate:
+            type7:
+              always: true
+      auto_cost:
+        reference_bandwidth: 45
+        unit: Gbps
+      router_id: 198.51.100.129
+      vrf: zone1
 - bootflash: 4495360
   device_name: aayushNXOS
   hardware:
@@ -254,22 +415,22 @@
     status: IN USE
     version: 1.0
   memory:
-    free_mb: 1062.21875
+    free_mb: 1534.24609375
     total_mb: 7945.015625
-    used_mb: 6882.796875
+    used_mb: 6410.76953125
   nxos_compile_time: 11/30/2023 12:00:00 [12/14/2023 05:25:50]
   nxos_image_file: bootflash:///nxos64-cs.10.4.2.F.bin
   os_type: NX-OS
   processes:
-    running: 4
-    total: 958
+    running: 1
+    total: 891
   processor:
     memory: 8135696
     type: Intel(R) Xeon(R) Platinum 8275CL CPU @ 3.00GHz
   release_type: Feature Release
   uptime:
-    days: 108
-    hours: 0
-    minutes: 15
-    seconds: 56
+    days: 111
+    hours: 2
+    minutes: 7
+    seconds: 35
   version: 10.4(2)
